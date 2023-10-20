@@ -21,7 +21,7 @@ namespace EmployeeManagement.Models
         public Gender Gender { get; set; }
         [Required]
         public byte DepartmentId { get; set; } 
-        public Department Department { get; set; }
+        //public Department Department { get; set; }
         public string PhotoPath { get; set; }
     }
 }

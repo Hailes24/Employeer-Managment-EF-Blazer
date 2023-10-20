@@ -1,5 +1,6 @@
 ﻿@page "/"
 @inherits EmployeeListBase
+@attribute [Authorize]
 
 <h3>Selected Employees Count: @SelectedEmployeesCount</h3>
 <input type="checkbox" id="showFooter" @bind="ShowFooter" />
@@ -11,11 +12,53 @@
 }
 else
 {
-    <div class="card-deck">
+   @*  <div class="card-deck">
         @foreach (var employee in Employees)
         {
-            <DisplayEmployee Employee="employee" ShowFooter="ShowFooter" OnEmployeeSelection="EmployeeSelectionChanged">
+            <DisplayEmployee Employee="employee" ShowFooter="ShowFooter" OnEmployeeSelection="EmployeeSelectionChanged" >
             </DisplayEmployee>
         }
-    </div>    
+    </div>  *@ 
+    @* 
+    <div class="cw-320">
+        <label class="dx-demo-price-list-title">Choose your new car options:</label>
+   
+        <div class="dx-demo-price-list-content">
+            <div class="dx-demo-row">
+                <DxCheckBox @bind-Checked="@Multimedia">Multimedia</DxCheckBox>
+                <div class="@GetCssClass(Multimedia)">$130</div>
+            </div>
+            <div class="dx-demo-row">
+                <DxCheckBox @bind-Checked="@AirConditioning">Air conditioning</DxCheckBox>
+                <div class="@GetCssClass(AirConditioning)">$800</div>
+            </div>
+            <div class="dx-demo-row">
+                <DxCheckBox @bind-Checked="@ParkingSensors">Parking camera</DxCheckBox>
+                <div class="@GetCssClass(ParkingSensors)">$400</div>
+            </div>
+            <div class="dx-demo-row">
+                <DxCheckBox @bind-Checked="@HeatedSeats">Heated seats</DxCheckBox>
+                <div class="@GetCssClass(HeatedSeats)">$230</div>
+            </div>
+        </div>
+        <div class="dx-demo-total dx-demo-row">
+            <strong>Total price:</strong>
+            <strong class="@GetCssClass(true)">$@GetTotalPrice()</strong>
+        </div>
+    </div>  *@
+
+    <div>
+        <div>
+            <DxCheckBox Checked="true"
+                        LabelPosition="LabelPosition.Left"
+                        Alignment="CheckBoxContentAlignment.Center">Multimedia</DxCheckBox>
+        </div>
+        <div>
+            <DxCheckBox Checked="false"
+                        LabelPosition="LabelPosition.Left"
+                        Alignment="CheckBoxContentAlignment.Center">Air Conditioning</DxCheckBox>
+        </div>
+        @* ... *@
+    </div>
+
 }

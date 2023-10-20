@@ -58,14 +58,13 @@ namespace EmployeeManagement.Api.Controllers
                 if (employee is null)
                     return BadRequest();
 
-                var emp = employeeRepository.GetEmployeeByEmail(employee.Email);
+                var empId = await employeeRepository.GetEmployee(employee.Id);
+                var empEmail = await employeeRepository.GetEmployeeByEmail(employee.Email);
 
-                if (emp != null)
-                {
-                    ModelState.AddModelError("email", "Employee email already in use");
-                    return BadRequest(ModelState);
-                }
+                if (new [] { empEmail, empId }.Any((it) => it != null))
+                    return BadRequest("Email ou Id já existente.");
 
+                //employee.Department = null;
                 var createdEmployee = await employeeRepository.AddEmployee(employee);
 
                 return CreatedAtAction(nameof(GetEmployee), new { id = createdEmployee.Id }, createdEmployee);
@@ -76,12 +75,12 @@ namespace EmployeeManagement.Api.Controllers
             }
         }
 
-        [HttpPut()]
-        public async Task<ActionResult<Employee>> UpdateEmployee(Employee employee)
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult<Employee>> UpdateEmployee(ushort id, Employee employee)
         {
             try
             {
-                var employeeToUpdate = await employeeRepository.GetEmployee(employee.Id);
+                var employeeToUpdate = await employeeRepository.GetEmployee(id);
 
                 if (employeeToUpdate is null)
                     return NotFound($"Employee with Id = {employee.Id} not found");
@@ -101,10 +100,8 @@ namespace EmployeeManagement.Api.Controllers
             {
                 var employeeToDelete = await employeeRepository.GetEmployee(id);
 
-                if (employeeToDelete == null)
-                {
-                    return NotFound($"Employee with Id = {id} not found");
-                }
+                if (employeeToDelete == null) 
+                    return NotFound($"Employee with Id = {id} not found"); 
 
                 return await employeeRepository.DeleteEmployee(id);
             }
