@@ -17,8 +17,11 @@ namespace EmployeeManagement.Api.Models
 
         public async Task<Employee> AddEmployee(Employee employee)
         {
+            //appDbContext.EnableIdentityInsert();
+            employee.Id = 0;
             var employeeAdded = await appDbContext.Employees.AddAsync(employee);
             await appDbContext.SaveChangesAsync();
+            //appDbContext.DisableIdentityInsert(); 
             return employeeAdded.Entity;
         }
 
@@ -35,7 +38,8 @@ namespace EmployeeManagement.Api.Models
             return null;
         }
 
-        public async Task<Employee> GetEmployee(int employeeId) => await appDbContext.Employees.Include(e => e.Department).FirstOrDefaultAsync(e => e.Id == employeeId);
+        //public async Task<Employee> GetEmployee(int employeeId) => await appDbContext.Employees.Include(e => e.Department).FirstOrDefaultAsync(e => e.Id == employeeId);
+        public async Task<Employee> GetEmployee(int employeeId) => await appDbContext.Employees.FirstOrDefaultAsync(e => e.Id == employeeId);
 
         public async Task<Employee> GetEmployeeByEmail(string email) => await appDbContext.Employees.FirstOrDefaultAsync(e => e.Email == email);
 

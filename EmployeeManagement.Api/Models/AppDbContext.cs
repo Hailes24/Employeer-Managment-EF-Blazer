@@ -13,6 +13,15 @@ namespace EmployeeManagement.Api.Models
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Department> Departments { get; set; }
 
+        public void EnableIdentityInsert()
+        {
+            Database.ExecuteSqlRaw("SET IDENTITY_INSERT Employees ON;");
+        }
+
+        public void DisableIdentityInsert()
+        {
+            Database.ExecuteSqlRaw("SET IDENTITY_INSERT Employees OFF;");
+        } 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

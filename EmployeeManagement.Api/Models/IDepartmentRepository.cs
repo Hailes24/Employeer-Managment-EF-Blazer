@@ -6,5 +6,8 @@ namespace EmployeeManagement.Api.Models
     {
         Task<IEnumerable<Department>> GetDepartments();
         Task<Department> GetDepartment(byte id);
+        Task<Department> AddDepartment(Department department);
+        Task<Department> UpdateDepartment(Department department);
+        Task<Department> DeleteDepartment(byte departmentId);
     }
 }

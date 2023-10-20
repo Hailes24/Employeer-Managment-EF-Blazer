@@ -19,7 +19,7 @@ namespace EmployeeManagement.Web.Models
         public Gender Gender { get; set; }
         [Required]
         public byte DepartmentId { get; set; }
-        [ValidateComplexType]
+        //[ValidateComplexType]
         public Department Department { get; set; } = new Department();
         public string PhotoPath { get; set; }
     }

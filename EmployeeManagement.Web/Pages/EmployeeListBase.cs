@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Data;
 
 namespace EmployeeManagement.Web.Pages
 {
@@ -20,6 +21,15 @@ namespace EmployeeManagement.Web.Pages
             //await Task.Run(LoadEmployees);
             //LoadEmployees();
             //return base.OnInitializedAsync();
+            //var dt = new DataTable();
+            //var dtWasChanged = dt.Rows.Cast<DataRow>().Any((r) => r.RowState == DataRowState.Added | r.RowState == DataRowState.Modified | r.RowState == DataRowState.Deleted);
+
+
+        }
+
+        public async Task EmployeeDeleted()
+        {
+            Employees = (await iEmployeeService.GetEmployees()).ToList(); 
         }
 
         protected void EmployeeSelectionChanged(bool isSelected)
@@ -81,6 +91,73 @@ namespace EmployeeManagement.Web.Pages
             };
 
             Employees = new List<Employee> { e1, e2, e3, e4 };
+        }
+
+        /********* Teste ********/
+
+        CarOptions options = CarOptions.AirConditioning | CarOptions.HeatedSeats;
+        public bool? SelectAllState
+        {
+            get
+            {
+                if (options == CarOptions.None)
+                    return false;
+                if (options == CarOptions.All)
+                    return true;
+                return null;
+            }
+            set
+            {
+                if (value.HasValue)
+                    options = value.Value ? CarOptions.All : CarOptions.None;
+            }
+        }
+        public bool AirConditioning
+        {
+            get => options.HasFlag(CarOptions.AirConditioning);
+            set => SetOption(value, CarOptions.AirConditioning);
+        }
+        public bool Multimedia
+        {
+            get => options.HasFlag(CarOptions.Multimedia);
+            set => SetOption(value, CarOptions.Multimedia);
+        }
+        public bool ParkingSensors
+        {
+            get => options.HasFlag(CarOptions.ParkingSensors);
+            set => SetOption(value, CarOptions.ParkingSensors);
+        }
+        public bool HeatedSeats
+        {
+            get => options.HasFlag(CarOptions.HeatedSeats);
+            set => SetOption(value, CarOptions.HeatedSeats);
+        }
+        void SetOption(bool value, CarOptions enumValue)
+        {
+            if (value)
+                options |= enumValue;
+            else
+                options &= ~enumValue;
+        }
+        public decimal GetTotalPrice()
+        {
+            decimal price = 0;
+            price += Multimedia ? 130 : 0;
+            price += AirConditioning ? 800 : 0;
+            price += ParkingSensors ? 400 : 0;
+            price += HeatedSeats ? 230 : 0;
+            return price;
+        }
+        public string GetCssClass(bool selected) => selected ? string.Empty : " dx-demo-text-strikethrough";
+        [Flags]
+        public enum CarOptions
+        {
+            None = 0x0,
+            AirConditioning = 0x1,
+            Multimedia = 0x2,
+            ParkingSensors = 0x4,
+            HeatedSeats = 0x8,
+            All = AirConditioning | Multimedia | ParkingSensors | HeatedSeats
         }
     }
 }

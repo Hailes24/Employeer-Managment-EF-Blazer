@@ -24,36 +24,36 @@ namespace EmployeeManagement.Api.Migrations
 
             modelBuilder.Entity("EmployeeManagement.Models.Department", b =>
                 {
-                    b.Property<byte>("Id")
+                    b.Property<byte>("DepartmentId")
                         .HasColumnType("tinyint");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("DepartmentId");
 
                     b.ToTable("Departments");
 
                     b.HasData(
                         new
                         {
-                            Id = (byte)1,
+                            DepartmentId = (byte)1,
                             Name = "IT"
                         },
                         new
                         {
-                            Id = (byte)2,
+                            DepartmentId = (byte)2,
                             Name = "HR"
                         },
                         new
                         {
-                            Id = (byte)3,
+                            DepartmentId = (byte)3,
                             Name = "Payroll"
                         },
                         new
                         {
-                            Id = (byte)4,
+                            DepartmentId = (byte)4,
                             Name = "Admin"
                         });
                 });
@@ -78,7 +78,8 @@ namespace EmployeeManagement.Api.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("Gender")
                         .HasColumnType("int");
@@ -92,6 +93,8 @@ namespace EmployeeManagement.Api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
 
                     b.ToTable("Employees");
 
@@ -140,6 +143,17 @@ namespace EmployeeManagement.Api.Migrations
                             LastName = "Longway",
                             PhotoPath = "images/sara.jpg"
                         });
+                });
+
+            modelBuilder.Entity("EmployeeManagement.Models.Employee", b =>
+                {
+                    b.HasOne("EmployeeManagement.Models.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Department");
                 });
 #pragma warning restore 612, 618
         }
